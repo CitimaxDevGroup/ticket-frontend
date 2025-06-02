@@ -39,8 +39,12 @@ const MessageForm: React.FC = () => {
         <section className="flex min-h-screen overflow-hidden">
             <Sidebar />
             <div
-                className="wrapper image-wrapper bg-image bg-overlay md:ml-[200px] flex-1 bg-no-repeat bg-[center_center] bg-cover relative z-0 !bg-fixed before:content-[''] before:block before:absolute before:z-[1] before:w-full before:h-full before:left-0 before:top-0 before:bg-[rgba(30,34,40,.5)]"
-                style={{ backgroundImage: `url(${companies})` }}
+                className="wrapper image-wrapper bg-image bg-overlay md:ml-[200px] flex-1 bg-no-repeat bg-cover relative z-0 bg-scroll before:content-[''] before:block before:absolute before:z-[1] before:w-full before:h-full before:left-0 before:top-0 before:bg-[rgba(30,34,40,.5)]"
+                style={{
+                    backgroundImage: `url(${companies})`,
+                    backgroundPositionX: '15px',
+                    backgroundPositionY: 'center',
+                }}
             >
                 <div className="relative z-[2] container min-h-screen flex items-center justify-center py-[5rem] xl:!py-[7rem]">
                     <div className="flex flex-wrap mx-[-15px]">
