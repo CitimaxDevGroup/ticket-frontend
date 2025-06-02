@@ -279,7 +279,7 @@ function InputField({ label, id, register, error, focusColor }) {
                     e.target.style.boxShadow = `0 0 0 3px ${focusColor}66`;
                 }}
                 onBlur={e => {
-                    e.target.style.borderColor = error ? "#f87171" : "#d1d5db"; // red-500 or gray-300
+                    e.target.style.borderColor = error ? "#f87171" : "#d1d5db";
                     e.target.style.boxShadow = "none";
                 }}
             />

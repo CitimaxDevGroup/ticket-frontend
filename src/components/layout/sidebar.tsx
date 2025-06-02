@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import orelogo from '../images/ore-logo-removebg.png';
-import { Ticket, CreditCard, LogOut, Menu, X } from "lucide-react";
+import { Ticket, CreditCard, LogOut, Menu, X, Send } from "lucide-react";
 
 const Sidebar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -19,12 +19,17 @@ const Sidebar: React.FC = () => {
         {
             label: "Request Company I.D.",
             icon: <CreditCard className="w-[18px] h-[18px] mr-3 text-white" />,
-            path: "/ID",
+            path: "/PageInProgress",
+        },
+         {
+            label: "Message Us",
+            icon: <Send className="w-[18px] h-[18px] mr-2 text-white" />,
+            path: "/PageInProgress",
         },
         {
             label: "Logout",
             icon: <LogOut className="w-[18px] h-[18px] mr-2 text-white" />,
-            path: "/",
+            path: "/PageInProgress",
         },
     ];
 
