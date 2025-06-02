@@ -3,17 +3,17 @@ import oreImage from './images/ore.jpg';
 
 const TicketFormPage = () => {
   return (
-    <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row shadow-lg rounded-lg overflow-hidden bg-white">
+    <div className="relative w-full min-h-screen flex flex-col lg:flex-row bg-white">
       <div
-        className="hidden lg:block lg:w-2/5"
+        className="w-full lg:w-2/5 h-64 lg:h-auto"
         style={{
           backgroundImage: `url(${oreImage})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '850px',
+          backgroundPosition: 'top center',
         }}
       ></div>
-      <div className="w-full lg:w-3/5 p-10 border-none outline-none shadow-none flex flex-col justify-start">
+
+      <div className="w-full lg:w-3/5 flex items-center justify-center p-4">
         <TicketForm />
       </div>
     </div>

@@ -74,7 +74,6 @@ const TicketForm = ({ onSubmit }: TicketFormProps = {}) => {
     setSubmitStatus("idle");
 
     try {
-      // Simulate progress bar
       for (let i = 0; i <= 100; i += 20) {
         setProgress(i);
         await new Promise((r) => setTimeout(r, 100));
@@ -106,7 +105,7 @@ const TicketForm = ({ onSubmit }: TicketFormProps = {}) => {
   };
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-0 bg-background border-0 shadow-none xl">
+    <div className="w-full max-w-2xl p-0 bg-background border-0 shadow-none">
       <h2 className="text-2xl font-bold mb-6 text-center">
         Submit a Support Ticket
       </h2>
@@ -185,7 +184,6 @@ const TicketForm = ({ onSubmit }: TicketFormProps = {}) => {
             />
           </div>
 
-          {/* Company */}
           <FormField
             control={form.control}
             name="company"
@@ -234,7 +232,6 @@ const TicketForm = ({ onSubmit }: TicketFormProps = {}) => {
             )}
           />
 
-          {/* Issue Type */}
           <FormField
             control={form.control}
             name="issueType"
