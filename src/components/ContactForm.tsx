@@ -36,7 +36,7 @@ const MessageForm: React.FC = () => {
         formBody.append("message", data.message);
 
         try {
-            await fetch("https://script.google.com/macros/s/AKfycbxGrkBOuaOmaQxNEYJGgocHuytdrs7h9WwTctDOWYUhKOUtXgadaxTtV1gF_Y-TY3uN6w/exec", {
+            await fetch("https://script.google.com/macros/s/AKfycbz53K_3dTFY4arinrUGxFIZbS8tFCvYXh2vPMdQONMBNug0zcT2vJTRTWUSCZNClE8pWQ/exec", {
                 method: "POST",
                 mode: "no-cors",
                 headers: {
