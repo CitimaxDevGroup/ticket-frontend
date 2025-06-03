@@ -53,7 +53,7 @@ const Sidebar: React.FC = () => {
     `}
             >
                 <div className="relative">
-                    <a href="#">
+                    <a href="/">
                         <img src={orelogo} alt="logo" className="w-[200px] pt-8" />
                     </a>
                 </div>

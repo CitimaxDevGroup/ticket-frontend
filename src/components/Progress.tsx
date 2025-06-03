@@ -18,8 +18,8 @@ const PageInProgress: React.FC = () => {
       <div className="flex justify-center pt-12">
         <div className="bg-white/80 p-6 rounded-xl shadow-lg flex flex-col items-center w-full max-w-lg mx-auto">
           <div className="flex items-center space-x-4">
-            <Loader2 className="animate-spin h-8 w-8 text-blue-700" />
-            <h1 className="text-2xl font-semibold">Page in Progress</h1>
+            <Loader2 className="animate-spin h-8 w-8 text-[#527ba0]" />
+            <h1 className="text-2xl font-semibold text-[#527ba0]">Page in Progress</h1>
           </div>
           <p className="mt-4 text-center text-black">
             We’re currently working on this page to make it even better for you.

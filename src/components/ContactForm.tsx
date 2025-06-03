@@ -39,20 +39,18 @@ const MessageForm: React.FC = () => {
         <section className="flex min-h-screen overflow-hidden">
             <Sidebar />
             <div
-                className="wrapper image-wrapper bg-image bg-overlay md:ml-[200px] flex-1 bg-no-repeat bg-cover relative z-0 bg-scroll before:content-[''] before:block before:absolute before:z-[1] before:w-full before:h-full before:left-0 before:top-0 before:bg-[rgba(30,34,40,.5)]"
+                className="wrapper image-wrapper bg-[center] md:bg-[15px_center] bg-image bg-overlay md:ml-[200px] min-h-screen flex-1 bg-no-repeat bg-cover relative z-0 bg-scroll before:content-[''] before:block before:absolute before:z-[1] before:w-full before:h-full before:left-0 before:top-0 before:bg-[rgba(30,34,40,.5)]"
                 style={{
                     backgroundImage: `url(${companies})`,
-                    backgroundPositionX: '15px',
-                    backgroundPositionY: 'center',
                 }}
             >
-                <div className="relative z-[2] container min-h-screen flex items-center justify-center py-[5rem] xl:!py-[7rem]">
+                <div className="relative z-[2] container flex items-center justify-center py-8 md:py-16">
                     <div className="flex flex-wrap mx-[-15px]">
                         <div className="xl:w-9/12 w-full flex-[0_0_auto] !px-[15px] max-w-full !mx-auto">
                             <div className="card rounded-lg !bg-[rgba(255,255,255,.9)] opacity-900">
-                                <div className="card-body xl:!py-16 xl:!px-24 p-[40px]">
-                                    <h2 className="text-center text-xl font-bold mb-3">Get in Touch</h2>
-                                    <p className="text-center mb-10">
+                                <div className="card-body xl:pt-16 xl:pb-8 xl:px-24 pt-10 pb-6 px-[40px] min-h-[550px]">
+                                    <h2 className="text-center text-4xl font-bold mb-1">Get in Touch</h2>
+                                    <p className="text-center mb-6">
                                         Have any questions? Reach out to us using the form below.
                                     </p>
                                     <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -70,12 +68,13 @@ const MessageForm: React.FC = () => {
                                                         }`}
                                                     aria-invalid={!!errors.name}
                                                 />
-                                                {touchedFields.name && errors.name && (
-                                                    <p className="text-sm text-red-500 mt-1">{errors.name.message}</p>
-                                                )}
-                                                {touchedFields.name && !errors.name && (
-                                                    <p className="text-sm text-green-600 mt-1">Looks good!</p>
-                                                )}
+                                                <div className="min-h-[1.25rem] mt-1">
+                                                    {touchedFields.name && errors.name ? (
+                                                        <p className="text-sm text-red-500">{errors.name.message}</p>
+                                                    ) : touchedFields.name && !errors.name ? (
+                                                        <p className="text-sm text-green-600">Looks good!</p>
+                                                    ) : null}
+                                                </div>
                                             </div>
 
                                             <div className="w-full md:w-1/2 px-[15px] mb-4">
@@ -99,7 +98,7 @@ const MessageForm: React.FC = () => {
                                                 )}
                                             </div>
 
-                                            <div className="w-full px-[15px] mb-4">
+                                            <div className="w-full px-[15px] mb-2">
                                                 <textarea
                                                     placeholder="Message *"
                                                     {...register("message")}
@@ -111,15 +110,17 @@ const MessageForm: React.FC = () => {
                                                         }`}
                                                     aria-invalid={!!errors.message}
                                                 />
-                                                {touchedFields.message && errors.message && (
-                                                    <p className="text-sm text-red-500 mt-1">{errors.message.message}</p>
-                                                )}
-                                                {touchedFields.message && !errors.message && (
-                                                    <p className="text-sm text-green-600 mt-1">Looks good!</p>
-                                                )}
+                                                <p className="text-sm mt-1 min-h-[1.25rem]">
+                                                    {touchedFields.message && errors.message && (
+                                                        <span className="text-red-500">{errors.message.message}</span>
+                                                    )}
+                                                    {touchedFields.message && !errors.message && (
+                                                        <span className="text-green-600">Looks good!</span>
+                                                    )}
+                                                </p>
                                             </div>
 
-                                            <div className="w-full text-center px-[15px]">
+                                            <div className="w-full text-center px-[15px] mt-5 mb-0">
                                                 <button
                                                     type="submit"
                                                     disabled={!isValid}
@@ -139,7 +140,6 @@ const MessageForm: React.FC = () => {
                     </div>
                 </div>
             </div>
-
         </section>
     );
 };
