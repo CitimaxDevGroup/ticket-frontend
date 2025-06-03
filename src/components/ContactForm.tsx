@@ -29,10 +29,28 @@ const MessageForm: React.FC = () => {
         },
     });
 
-    const onSubmit = (data: FormData) => {
-        console.log("Submitted:", data);
-        alert("Form submitted successfully!");
-        reset();
+    const onSubmit = async (data: FormData) => {
+        const formBody = new URLSearchParams();
+        formBody.append("name", data.name);
+        formBody.append("email", data.email);
+        formBody.append("message", data.message);
+
+        try {
+            await fetch("https://script.google.com/macros/s/AKfycbxGrkBOuaOmaQxNEYJGgocHuytdrs7h9WwTctDOWYUhKOUtXgadaxTtV1gF_Y-TY3uN6w/exec", {
+                method: "POST",
+                mode: "no-cors",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: formBody.toString(),
+            });
+
+            alert("Form submitted successfully!");
+            reset();
+        } catch (error: any) {
+            console.error("Error submitting form:", error);
+            alert(`Submission failed: ${error.message || error}`);
+        }
     };
 
     return (

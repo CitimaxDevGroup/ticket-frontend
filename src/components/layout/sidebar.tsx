@@ -25,8 +25,8 @@ const Sidebar: React.FC = () => {
         {
             label: "Message Us",
             icon: <Send className="w-[18px] h-[18px] mr-2 text-white" />,
-            // path: "/Contact",
-            path: "/PageInProgress",
+            path: "/Contact",
+            // path: "/PageInProgress",
         },
         {
             label: "Logout",
