@@ -19,8 +19,8 @@ const Sidebar: React.FC = () => {
         {
             label: "Request Company I.D.",
             icon: <CreditCard className="w-[18px] h-[18px] mr-3 text-white" />,
-            // path: "/ID",
-            path: "/PageInProgress",
+            path: "/ID",
+            // path: "/PageInProgress",
         },
         {
             label: "Message Us",

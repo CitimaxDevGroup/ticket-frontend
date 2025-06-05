@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import companies from "./images/companies.jpg";
 import Sidebar from "./layout/sidebar";
+import { CheckCircle, AlertCircle } from "lucide-react";
 
 const schema = z.object({
     name: z.string().min(1, "Please enter your name."),
@@ -29,6 +30,9 @@ const MessageForm: React.FC = () => {
         },
     });
 
+    const [showStatusModal, setShowStatusModal] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<"success" | "error">("success");
+
     const onSubmit = async (data: FormData) => {
         const formBody = new URLSearchParams();
         formBody.append("name", data.name);
@@ -36,7 +40,7 @@ const MessageForm: React.FC = () => {
         formBody.append("message", data.message);
 
         try {
-            await fetch("https://script.google.com/macros/s/AKfycbz53K_3dTFY4arinrUGxFIZbS8tFCvYXh2vPMdQONMBNug0zcT2vJTRTWUSCZNClE8pWQ/exec", {
+            await fetch("https://script.google.com/macros/s/AKfycbziYXf2WXiBUKKmhkrMmRrWBgUaAAvG_gLoS7UaQ-50su_fnyOR9k7iSEpZZYDXbFfJSQ/exec", {
                 method: "POST",
                 mode: "no-cors",
                 headers: {
@@ -45,11 +49,13 @@ const MessageForm: React.FC = () => {
                 body: formBody.toString(),
             });
 
-            alert("Form submitted successfully!");
+            setSubmitStatus("success");
+            setShowStatusModal(true);
             reset();
         } catch (error: any) {
             console.error("Error submitting form:", error);
-            alert(`Submission failed: ${error.message || error}`);
+            setSubmitStatus("error");
+            setShowStatusModal(true);
         }
     };
 
@@ -62,6 +68,36 @@ const MessageForm: React.FC = () => {
                     backgroundImage: `url(${companies})`,
                 }}
             >
+                {showStatusModal && (
+                    <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
+                        <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+                            {submitStatus === "success" ? (
+                                <>
+                                    <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+                                    <h2 className="text-lg font-bold mb-2">Success</h2>
+                                    <p className="text-gray-700 mb-6">
+                                        Your message was submitted successfully! We'll get back to you as soon as possible.
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+                                    <h2 className="text-lg font-bold mb-2">Error</h2>
+                                    <p className="text-gray-700 mb-6">
+                                        There was a problem submitting your ticket. Please try again.
+                                    </p>
+                                </>
+                            )}
+                            <button
+                                onClick={() => setShowStatusModal(false)}
+                                className="mt-2 px-6 py-2 bg-[#6491ba] text-white rounded hover:bg-[#4f7aa0]"
+                            >
+                                OK
+                            </button>
+                        </div>
+                    </div>
+                )}
+
                 <div className="relative z-[2] container flex items-center justify-center py-8 md:py-16">
                     <div className="flex flex-wrap mx-[-15px]">
                         <div className="xl:w-9/12 w-full flex-[0_0_auto] !px-[15px] max-w-full !mx-auto">
