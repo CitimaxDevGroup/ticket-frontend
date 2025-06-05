@@ -19,7 +19,7 @@ const schema = z.object({
     }),
     sss: z.string().min(1, "SSS Number is required"),
     tin: z.string().min(1, "TIN Number is required"),
-    philhealt: z.string().min(1, "PhilHealth Number is required"),
+    philhealth: z.string().min(1, "PhilHealth Number is required"),
     pagibig: z.string().min(1, "Pag-IBIG Number is required"),
     emergency: z.string().min(1, "Emergency Contact Name is required"),
     emergencynum: z.string().min(1, "Emergency Contact Number is required"),
@@ -47,7 +47,7 @@ export default function SingleForm() {
         return value && !hasError;
     });
 
-    const section2Fields = ["sss", "tin", "philhealt", "pagibig"];
+    const section2Fields = ["sss", "tin", "philhealth", "pagibig"];
     const section2Completed = section2Fields.every(
         (field) => !!watch(field) && !errors[field]
     );
@@ -89,7 +89,7 @@ export default function SingleForm() {
             };
 
             await fetch(
-                "https://script.google.com/macros/s/AKfycbzoZrQdkGyEemKvhcSTESk0HNiHEdZ4t4zx0S2nW9MgmFwmEMFg4Ly9gFr8SSLxLHOcUQ/exec",
+                "https://script.google.com/macros/s/AKfycbwVBJAQcIVjmil4HwzErTm_we8UWuStorzMSshqAysgQ4pUI5EEjEDdlu3Sq-cLysXB5Q/exec",
                 {
                     method: "POST",
                     headers: {
@@ -185,7 +185,6 @@ export default function SingleForm() {
                     If you wish to request a Company I.D., kindly complete the form below. Please make sure all information provided is correct and up-to-date, as it will be used for processing your identification. Inaccurate or incomplete submissions may cause delays or be rejected.
                 </p>
 
-
                 <div className="bg-white rounded-lg shadow-lg p-6 md:p-10 max-w-3xl mx-auto w-full">
                     <form onSubmit={handlePreSubmit} noValidate>
                         <h2
@@ -266,7 +265,7 @@ export default function SingleForm() {
                         {!section1Completed && (
                             <div className="flex items-center justify-center text-sm text-yellow-700 border-yellow-300 rounded-md mb-4">
                                 <AlertCircle className="w-5 h-5 mr-2 text-yellow-600" />
-                                <span>Please complete Section 1 before proceeding to Section 2.</span>
+                                <span>Kindly complete Section 1 before proceeding to Section 2.</span>
                             </div>
                         )}
                         <fieldset className={section1Completed ? "" : "pointer-events-none opacity-50"}>
@@ -286,9 +285,9 @@ export default function SingleForm() {
                             />
                             <InputField
                                 label="PhilHealth Number"
-                                id="philhealt"
+                                id="philhealth"
                                 register={register}
-                                error={errors.philhealt?.message}
+                                error={errors.philhealth?.message}
                                 focusColor={blueColor}
                             />
                             <InputField
@@ -309,7 +308,7 @@ export default function SingleForm() {
                         {!section2Completed && (
                             <div className="flex items-center justify-center text-sm text-yellow-700 border-yellow-300 rounded-md mb-4">
                                 <AlertCircle className="w-5 h-5 mr-2 text-yellow-600" />
-                                <span>Please complete Section 2 before proceeding to Section 3.</span>
+                                <span>Kindly complete Section 2 before proceeding to Section 3.</span>
                             </div>
                         )}
                         <fieldset className={section2Completed ? "" : "pointer-events-none opacity-50"}>
