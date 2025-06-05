@@ -204,6 +204,7 @@ const TicketForm = ({ onSubmit }: TicketFormProps = {}) => {
                     <SelectItem value="DND Vertis">Dean and Deluca Vertis North</SelectItem>
                     <SelectItem value="DND Cebu">Dean and Deluca Cebu</SelectItem>
                     <SelectItem value="DND Tanay">Dean and Deluca Tanay</SelectItem>
+                    <SelectItem value="DND Commissary">Dean and Deluca Commissary</SelectItem>
                     <SelectItem value="Monte">Monte De Tesoro</SelectItem>
                     <SelectItem value="Compounding">Lifecore Compounding</SelectItem>
                     <SelectItem value="Laboratory">Lifecore Laboratory</SelectItem>

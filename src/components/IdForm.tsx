@@ -8,6 +8,7 @@ import { CheckCircle, AlertCircle, HelpCircle } from "lucide-react";
 const schema = z.object({
     fullName: z.string().min(1, "Full Name is required"),
     address: z.string().min(1, "Address is required"),
+    email: z.string().email("Invalid email address").min(1, "Email is required"),
     position: z.string().min(1, "Job Position is required"),
     cname: z.string().min(1, "Company Name is required"),
     company: z.string().min(1, "Company ID Number is required"),
@@ -25,6 +26,7 @@ const schema = z.object({
     emergencynum: z.string().min(1, "Emergency Contact Number is required"),
 });
 
+
 const blueColor = "#6491ba";
 
 export default function SingleForm() {
@@ -37,7 +39,7 @@ export default function SingleForm() {
         reset,
     } = useForm({ resolver: zodResolver(schema), mode: "onTouched" });
 
-    const section1Fields = ["fullName", "address", "position", "cname", "company", "photo", "esign"];
+    const section1Fields = ["fullName", "address", "email", "position", "cname", "company", "photo", "esign"];
     const section1Completed = section1Fields.every((field) => {
         const value = watch(field);
         const hasError = errors[field];
@@ -89,7 +91,7 @@ export default function SingleForm() {
             };
 
             await fetch(
-                "https://script.google.com/macros/s/AKfycbwVBJAQcIVjmil4HwzErTm_we8UWuStorzMSshqAysgQ4pUI5EEjEDdlu3Sq-cLysXB5Q/exec",
+                "https://script.google.com/macros/s/AKfycbyGCcQkf4t5RupTvZu2bijI6dtY-ZwSdENxd3Euk715JOZ7EtGIESkcylVQ3qLGxZin9Q/exec",
                 {
                     method: "POST",
                     headers: {
@@ -205,6 +207,13 @@ export default function SingleForm() {
                             id="address"
                             register={register}
                             error={errors.address?.message}
+                            focusColor={blueColor}
+                        />
+                        <InputField
+                            label="Email"
+                            id="email"
+                            register={register}
+                            error={errors.email?.message}
                             focusColor={blueColor}
                         />
                         <InputField
