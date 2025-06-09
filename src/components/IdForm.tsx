@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Sidebar from "./layout/sidebar";
-import { CheckCircle, AlertCircle, HelpCircle } from "lucide-react";
+import { CheckCircle, AlertCircle, HelpCircle, Italic } from "lucide-react";
 
 const schema = z.object({
     fullName: z.string().min(1, "Full Name is required"),
@@ -57,6 +57,7 @@ export default function SingleForm() {
     const [showStatusModal, setShowStatusModal] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<"success" | "error">("success");
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const confirmSubmit = () => {
         setShowConfirmModal(false);
@@ -80,6 +81,8 @@ export default function SingleForm() {
         });
 
     const onSubmit = async (data) => {
+        setIsSubmitting(true);
+
         try {
             const photoBase64 = data.photo ? await toBase64(data.photo) : "";
             const esignBase64 = data.esign ? await toBase64(data.esign) : "";
@@ -102,6 +105,8 @@ export default function SingleForm() {
                 }
             );
 
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
             setSubmitStatus("success");
             setShowStatusModal(true);
             reset();
@@ -109,6 +114,8 @@ export default function SingleForm() {
             console.error("Submission failed:", error);
             setSubmitStatus("error");
             setShowStatusModal(true);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -116,6 +123,37 @@ export default function SingleForm() {
         <div className="flex min-h-screen flex-col md:flex-row bg-gray-100">
             <Sidebar />
             <div className="flex-1 p-4 md:p-10 md:ml-[250px]">
+
+                {isSubmitting && (
+                    <div className="fixed inset-0 z-50 bg-white bg-opacity-80 flex items-center justify-center">
+                        <div className="bg-white p-6 rounded-lg shadow-xl flex flex-col items-center justify-center text-center">
+                            <svg
+                                className="animate-spin h-10 w-10 text-blue-500 mb-4"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                ></circle>
+                                <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v8H4z"
+                                ></path>
+                            </svg>
+                            <p className="text-lg font-medium text-gray-700">
+                                Submitting your form, please wait...
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 {showConfirmModal && (
                     <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
                         <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center relative">
@@ -277,6 +315,11 @@ export default function SingleForm() {
                                 <span>Kindly complete Section 1 before proceeding to Section 2.</span>
                             </div>
                         )}
+                        <p className="text-center text-md text-muted-foreground mb-4 max-w-2xl mx-auto">
+                        If you do not have an ID or number for any of the fields below, please write <i>"N/A"</i> in the space provided. 
+                        Kindly note that it is your responsibility to complete the form. If any information is missing, your ID details will be incomplete, but we will still proceed with making your ID as is. 
+                        Please be advised that we are not responsible for any issues that may arise due to the incomplete information.
+                        Thank you for your cooperation!</p>
                         <fieldset className={section1Completed ? "" : "pointer-events-none opacity-50"}>
                             <InputField
                                 label="SSS Number"
@@ -344,8 +387,9 @@ export default function SingleForm() {
                                 style={{ backgroundColor: blueColor }}
                                 onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#507a9f")}
                                 onMouseOut={(e) => (e.currentTarget.style.backgroundColor = blueColor)}
+                                disabled={isSubmitting}
                             >
-                                Submit
+                                {isSubmitting ? "Submitting..." : "Submit"}
                             </button>
                         </div>
                     </form>

@@ -32,8 +32,11 @@ const MessageForm: React.FC = () => {
 
     const [showStatusModal, setShowStatusModal] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<"success" | "error">("success");
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const onSubmit = async (data: FormData) => {
+        setIsSubmitting(true);
+
         const formBody = new URLSearchParams();
         formBody.append("name", data.name);
         formBody.append("email", data.email);
@@ -49,6 +52,8 @@ const MessageForm: React.FC = () => {
                 body: formBody.toString(),
             });
 
+            window.scrollTo({ top: 0, behavior: "smooth" });
+
             setSubmitStatus("success");
             setShowStatusModal(true);
             reset();
@@ -56,6 +61,8 @@ const MessageForm: React.FC = () => {
             console.error("Error submitting form:", error);
             setSubmitStatus("error");
             setShowStatusModal(true);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -68,6 +75,18 @@ const MessageForm: React.FC = () => {
                     backgroundImage: `url(${companies})`,
                 }}
             >
+                {isSubmitting && (
+                    <div className="fixed inset-0 z-[9999] bg-white bg-opacity-80 flex items-center justify-center">
+                        <div className="flex flex-col items-center space-y-4">
+                            <svg className="animate-spin h-8 w-8 text-[#6491ba]" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                            </svg>
+                            <p className="text-[#6491ba] font-medium">Submitting your form, please wait...</p>
+                        </div>
+                    </div>
+                )}
+
                 {showStatusModal && (
                     <div className="fixed inset-0 z-50 bg-black bg-opacity-40 flex items-center justify-center">
                         <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
@@ -108,8 +127,8 @@ const MessageForm: React.FC = () => {
                                         Have any questions? Reach out to us using the form below.
                                     </p>
                                     <form onSubmit={handleSubmit(onSubmit)} noValidate>
-                                        <div className="flex flex-wrap mx-[-10px]">
-                                            <div className="w-full md:w-1/2 px-[15px] mb-4">
+                                        <div className="flex flex-wrap mx-[-10px] gap-y-0 md:gap-y-0">
+                                            <div className="w-full md:w-1/2 px-[15px] flex flex-col">
                                                 <input
                                                     type="text"
                                                     placeholder="Name *"
@@ -122,16 +141,18 @@ const MessageForm: React.FC = () => {
                                                         }`}
                                                     aria-invalid={!!errors.name}
                                                 />
-                                                <div className="min-h-[1.25rem] mt-1">
-                                                    {touchedFields.name && errors.name ? (
+                                                <div className="min-h-[1.5rem]">
+                                                    {touchedFields.name && errors.name && (
                                                         <p className="text-sm text-red-500">{errors.name.message}</p>
-                                                    ) : touchedFields.name && !errors.name ? (
+                                                    )}
+                                                    {touchedFields.name && !errors.name && (
                                                         <p className="text-sm text-green-600">Looks good!</p>
-                                                    ) : null}
+                                                    )}
                                                 </div>
                                             </div>
 
-                                            <div className="w-full md:w-1/2 px-[15px] mb-4">
+
+                                            <div className="w-full md:w-1/2 px-[15px] flex flex-col">
                                                 <input
                                                     type="email"
                                                     placeholder="Email *"
@@ -144,12 +165,14 @@ const MessageForm: React.FC = () => {
                                                         }`}
                                                     aria-invalid={!!errors.email}
                                                 />
-                                                {touchedFields.email && errors.email && (
-                                                    <p className="text-sm text-red-500 mt-1">{errors.email.message}</p>
-                                                )}
-                                                {touchedFields.email && !errors.email && (
-                                                    <p className="text-sm text-green-600 mt-1">Looks good!</p>
-                                                )}
+                                                <div className="min-h-[1.5rem]">
+                                                    {touchedFields.email && errors.email && (
+                                                        <p className="text-sm text-red-500">{errors.email.message}</p>
+                                                    )}
+                                                    {touchedFields.email && !errors.email && (
+                                                        <p className="text-sm text-green-600">Looks good!</p>
+                                                    )}
+                                                </div>
                                             </div>
 
                                             <div className="w-full px-[15px] mb-2">
@@ -174,16 +197,16 @@ const MessageForm: React.FC = () => {
                                                 </p>
                                             </div>
 
-                                            <div className="w-full text-center px-[15px] mt-5 mb-0">
+                                            <div className="w-full text-center px-[15px] mt-2 mb-0">
                                                 <button
                                                     type="submit"
-                                                    disabled={!isValid}
-                                                    className={`btn btn-primary px-8 py-3 text-white font-medium rounded-full ${isValid
-                                                        ? "bg-[#6491ba] hover:bg-[#345fbb]"
-                                                        : "bg-[#6491ba] cursor-not-allowed"
+                                                    disabled={!isValid || isSubmitting}
+                                                    className={`btn btn-primary px-8 py-3 text-white font-medium rounded-full ${isValid && !isSubmitting
+                                                            ? "bg-[#6491ba] hover:bg-[#345fbb]"
+                                                            : "bg-[#6491ba] cursor-not-allowed"
                                                         }`}
                                                 >
-                                                    Send Message
+                                                    {isSubmitting ? "Sending..." : "Send Message"}
                                                 </button>
                                             </div>
                                         </div>
