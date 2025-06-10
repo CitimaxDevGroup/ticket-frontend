@@ -1,6 +1,7 @@
-// src/components/auth/RegistrationForm.tsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import { auth } from "@/firebase"; // Ensure this path is correct
 
 function RegistrationForm() {
   const navigate = useNavigate();
@@ -10,21 +11,31 @@ function RegistrationForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!agreeToTerms) {
-      alert("You must agree to the terms and conditions.");
-      return;
-    }
+
+    
+
     if (password !== confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-    if (fullName && email && password) {
-      navigate("/ticket");
-    } else {
+
+    if (!fullName || !email || !password) {
       alert("Please fill in all required fields.");
+      return;
+    }
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, {
+        displayName: fullName,
+      });
+      navigate("/");
+    } catch (err) {
+      setError("Failed to create account. Try again.");
     }
   };
 
@@ -46,7 +57,6 @@ function RegistrationForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Full Name */}
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
           <label className="block text-xs text-gray-500 px-4 pt-3">Full Name</label>
           <div className="flex items-center px-4 pb-2">
@@ -62,7 +72,6 @@ function RegistrationForm() {
           </div>
         </div>
 
-        {/* Email */}
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
           <label className="block text-xs text-gray-500 px-4 pt-3">Email Address</label>
           <div className="flex items-center px-4 pb-2">
@@ -78,7 +87,6 @@ function RegistrationForm() {
           </div>
         </div>
 
-        {/* Password */}
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
           <label className="block text-xs text-gray-500 px-4 pt-3">Password</label>
           <div className="flex items-center px-4 pb-2">
@@ -101,7 +109,6 @@ function RegistrationForm() {
           </div>
         </div>
 
-        {/* Confirm Password */}
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
           <label className="block text-xs text-gray-500 px-4 pt-3">Confirm Password</label>
           <div className="flex items-center px-4 pb-2">
@@ -117,10 +124,10 @@ function RegistrationForm() {
           </div>
         </div>
 
-        {/* Agree to Terms */}
         
 
-        {/* Submit Button */}
+        {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
         <button
           type="submit"
           className="w-full bg-[#6491ba] hover:bg-[#507aa0] text-white py-3 px-4 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] shadow-md"

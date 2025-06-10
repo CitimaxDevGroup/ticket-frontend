@@ -14,7 +14,7 @@ const Sidebar: React.FC = () => {
         {
             label: "Submit Support Ticket",
             icon: <Ticket className="w-[18px] h-[18px] mr-3 text-white" />,
-            path: "/",
+            path: "/ticketing",
         },
         {
             label: "Request Company I.D.",

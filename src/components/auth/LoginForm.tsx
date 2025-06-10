@@ -1,25 +1,32 @@
-// src/components/auth/LoginForm.tsx
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/firebase"; // Make sure this path matches your Firebase setup
 
 function LoginForm() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (email && password) {
-      navigate("/ticket");
-    } else {
+    if (!email || !password) {
       alert("Please enter valid credentials");
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate("/ticketing"); // Redirect after successful login
+    } catch (err) {
+      setError("Invalid email or password.");
     }
   };
 
   return (
-    
     <div className="animate-fade-in">
       <button className="google-btn w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300 mb-6">
         <img
@@ -37,7 +44,6 @@ function LoginForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Email Field */}
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
           <label htmlFor="email" className="block text-xs text-gray-500 px-4 pt-3">
             Email Address
@@ -56,7 +62,6 @@ function LoginForm() {
           </div>
         </div>
 
-        {/* Password Field */}
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
           <label htmlFor="password" className="block text-xs text-gray-500 px-4 pt-3">
             Password
@@ -82,38 +87,31 @@ function LoginForm() {
           </div>
         </div>
 
-        {/* Remember Me + Forgot Password */}
         <div className="flex items-center justify-between text-sm">
-          <label className="flex items-center">
-            <input type="checkbox" className="h-4 w-4 text-blue-600 rounded border-gray-300" />
-            <span className="ml-2 text-gray-600">Remember me</span>
-          </label>
           <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline">
             Forgot password?
           </a>
         </div>
 
-        {/* Submit Button */}
+        {error && <p className="text-sm text-red-500 text-center">{error}</p>}
+
         <button
           type="submit"
-           className="w-full bg-[#6491ba] hover:bg-[#507aa0] text-white py-3 px-4 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] shadow-md"
-           >
-            Log In
-            </button>
+          className="w-full bg-[#6491ba] hover:bg-[#507aa0] text-white py-3 px-4 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] shadow-md"
+        >
+          Log In
+        </button>
       </form>
 
-      {/* Sign Up Link */}
       <div className="mt-6 text-center">
         <p className="text-gray-600">
           Don't have an account?
-          <a href="/signup" className="text-blue-600 hover:text-blue-800 font-medium hover:underline ml-1"
-          >
+          <a href="/signup" className="text-blue-600 hover:text-blue-800 font-medium hover:underline ml-1">
             Sign up
           </a>
         </p>
       </div>
     </div>
-    
   );
 }
 

@@ -8,6 +8,7 @@ import Progress from './components/Progress';
 import Login from './components/login';
 import Signup from './components/signup';
 import Ticketingpage from './components/ticketingpage';
+import AuthRoute from './AuthRoute';
 
 function App() {
   const tempoRoutes = import.meta.env.VITE_TEMPO === "true" ? useRoutes(routes) : null;
@@ -18,12 +19,12 @@ function App() {
         <Routes>
           {/* <Route path="/" element={<Login />} /> */}
           <Route path="/" element={<Login />} />
-          <Route path="/ID" element={<IdForm />} />
-          <Route path="/Contact" element={<Contact />} />
-          <Route path="/PageInProgress" element={<Progress />} />
+          <Route path="/ID" element= {<AuthRoute><IdForm /></AuthRoute>} />
+          <Route path="/Contact" element={<AuthRoute><Contact /></AuthRoute>} />
+          <Route path="/PageInProgress" element={<AuthRoute><Progress /></AuthRoute>} />
           <Route path="/signup" element={<Signup />} />
           {/* <Route path="/login" element={<Login />} /> */}
-          <Route path="/ticketing" element={<Ticketingpage />} />
+          <Route path="/ticketing" element={<AuthRoute><Ticketingpage /></AuthRoute>} />
         </Routes>
         {tempoRoutes}
       </>
