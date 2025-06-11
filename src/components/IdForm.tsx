@@ -195,7 +195,7 @@ export default function SingleForm() {
                                     <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
                                     <h2 className="text-lg font-bold mb-2">Success</h2>
                                     <p className="text-gray-700 mb-6">
-                                        Your submission was successful! We will process your request and provide your Company I.D. as soon as possible.
+                                        Your submission was successful! We will process your request and provide your Company I.D. as soon as possible, once it has been approved by the HR Manager.
                                     </p>
                                 </>
                             ) : (
