@@ -1,13 +1,26 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAuth, signOut } from 'firebase/auth';
 import orelogo from '../images/ore-logo-removebg.png';
 import { Ticket, CreditCard, LogOut, Menu, X, Send } from "lucide-react";
 
 const Sidebar: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
+    const auth = getAuth();
 
     const toggleSidebar = () => {
         setIsOpen(!isOpen);
+    };
+
+    const handleLogout = async () => {
+        try {
+            await signOut(auth);
+            navigate("/");
+        } catch (error) {
+            console.error("Logout error:", error);
+            alert("Failed to log out. Please try again.");
+        }
     };
 
     const navItems = [
@@ -20,18 +33,11 @@ const Sidebar: React.FC = () => {
             label: "Request Company I.D.",
             icon: <CreditCard className="w-[18px] h-[18px] mr-3 text-white" />,
             path: "/ID",
-            // path: "/PageInProgress",
         },
         {
             label: "Message Us",
             icon: <Send className="w-[18px] h-[18px] mr-2 text-white" />,
             path: "/Contact",
-            // path: "/PageInProgress",
-        },
-        {
-            label: "Logout",
-            icon: <LogOut className="w-[18px] h-[18px] mr-2 text-white" />,
-            path: "/PageInProgress",
         },
     ];
 
@@ -44,14 +50,7 @@ const Sidebar: React.FC = () => {
                 {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
 
-            <nav
-                className={`
-        bg-[#6491ba] h-screen fixed top-0 left-0 w-[250px] py-6 px-4 z-40
-        ${isOpen ? "block" : "hidden"} 
-        md:block
-        pt-10 md:pt-0
-    `}
-            >
+            <nav className={`bg-[#6491ba] h-screen fixed top-0 left-0 w-[250px] py-6 px-4 z-40 ${isOpen ? "block" : "hidden"} md:block pt-10 md:pt-0`}>
                 <div className="relative">
                     <a href="/">
                         <img src={orelogo} alt="logo" className="w-[200px] pt-8" />
@@ -72,6 +71,15 @@ const Sidebar: React.FC = () => {
                                 </Link>
                             </li>
                         ))}
+                        <li>
+                            <button
+                                onClick={handleLogout}
+                                className="text-white font-medium hover:text-white hover:bg-[#5279a0] text-[15px] flex items-center rounded px-4 py-2 transition-all w-full"
+                            >
+                                <LogOut className="w-[18px] h-[18px] mr-2 text-white" />
+                                <span>Logout</span>
+                            </button>
+                        </li>
                     </ul>
                 </div>
             </nav>
