@@ -3,6 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { CheckCircle, AlertCircle } from "lucide-react";
+import { useEffect } from "react";
+import { auth } from "@/firebase"; 
+import { onAuthStateChanged } from "firebase/auth";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -103,6 +106,15 @@ const TicketForm = ({ onSubmit }: TicketFormProps = {}) => {
       setProgress(100);
     }
   };
+  useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user && user.email) {
+      form.setValue("email", user.email);
+    }
+  });
+
+  return () => unsubscribe(); // cleanup
+}, []);
 
   return (
     <div className="w-full max-w-2xl p-0 bg-background border-0 shadow-none">
@@ -176,7 +188,7 @@ const TicketForm = ({ onSubmit }: TicketFormProps = {}) => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="email@example.com" {...field} />
+                    <Input type="email" readOnly className="bg-gray-100 cursor-not-allowed" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

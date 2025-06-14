@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import companies from "./images/companies.jpg";
 import Sidebar from "./layout/sidebar";
 import { CheckCircle, AlertCircle } from "lucide-react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const schema = z.object({
     name: z.string().min(1, "Please enter your name."),
@@ -15,11 +16,17 @@ const schema = z.object({
 type FormData = z.infer<typeof schema>;
 
 const MessageForm: React.FC = () => {
+    const [userEmail, setUserEmail] = useState("");
+    const [showStatusModal, setShowStatusModal] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState<"success" | "error">("success");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
     const {
         register,
         handleSubmit,
         formState: { errors, touchedFields, isValid },
         reset,
+        setValue,
     } = useForm<FormData>({
         resolver: zodResolver(schema),
         mode: "onBlur",
@@ -30,9 +37,18 @@ const MessageForm: React.FC = () => {
         },
     });
 
-    const [showStatusModal, setShowStatusModal] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState<"success" | "error">("success");
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    // Get current user's email from Firebase Auth
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (user?.email) {
+                setUserEmail(user.email);
+                setValue("email", user.email); // set the form field value
+            }
+        });
+
+        return () => unsubscribe();
+    }, [setValue]);
 
     const onSubmit = async (data: FormData) => {
         setIsSubmitting(true);
@@ -43,21 +59,24 @@ const MessageForm: React.FC = () => {
         formBody.append("message", data.message);
 
         try {
-            await fetch("https://script.google.com/macros/s/AKfycbziYXf2WXiBUKKmhkrMmRrWBgUaAAvG_gLoS7UaQ-50su_fnyOR9k7iSEpZZYDXbFfJSQ/exec", {
-                method: "POST",
-                mode: "no-cors",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: formBody.toString(),
-            });
+            await fetch(
+                "https://script.google.com/macros/s/AKfycbziYXf2WXiBUKKmhkrMmRrWBgUaAAvG_gLoS7UaQ-50su_fnyOR9k7iSEpZZYDXbFfJSQ/exec",
+                {
+                    method: "POST",
+                    mode: "no-cors",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: formBody.toString(),
+                }
+            );
 
             window.scrollTo({ top: 0, behavior: "smooth" });
 
             setSubmitStatus("success");
             setShowStatusModal(true);
             reset();
-        } catch (error: any) {
+        } catch (error) {
             console.error("Error submitting form:", error);
             setSubmitStatus("error");
             setShowStatusModal(true);
@@ -71,9 +90,7 @@ const MessageForm: React.FC = () => {
             <Sidebar />
             <div
                 className="wrapper image-wrapper bg-[center] md:bg-[15px_center] bg-image bg-overlay md:ml-[200px] min-h-screen flex-1 bg-no-repeat bg-cover relative z-0 bg-scroll before:content-[''] before:block before:absolute before:z-[1] before:w-full before:h-full before:left-0 before:top-0 before:bg-[rgba(30,34,40,.5)]"
-                style={{
-                    backgroundImage: `url(${companies})`,
-                }}
+                style={{ backgroundImage: `url(${companies})` }}
             >
                 {isSubmitting && (
                     <div className="fixed inset-0 z-[9999] bg-white bg-opacity-80 flex items-center justify-center">
@@ -123,9 +140,7 @@ const MessageForm: React.FC = () => {
                             <div className="card rounded-lg !bg-[rgba(255,255,255,.9)] opacity-900">
                                 <div className="card-body xl:pt-16 xl:pb-8 xl:px-24 pt-10 pb-6 px-[40px] min-h-[550px]">
                                     <h2 className="text-center text-4xl font-bold mb-1">Get in Touch</h2>
-                                    <p className="text-center mb-6">
-                                        Have any questions? Reach out to us using the form below.
-                                    </p>
+                                    <p className="text-center mb-6">Have any questions? Reach out to us using the form below.</p>
                                     <form onSubmit={handleSubmit(onSubmit)} noValidate>
                                         <div className="flex flex-wrap mx-[-10px] gap-y-0 md:gap-y-0">
                                             <div className="w-full md:w-1/2 px-[15px] flex flex-col">
@@ -151,13 +166,13 @@ const MessageForm: React.FC = () => {
                                                 </div>
                                             </div>
 
-
                                             <div className="w-full md:w-1/2 px-[15px] flex flex-col">
                                                 <input
                                                     type="email"
                                                     placeholder="Email *"
                                                     {...register("email")}
-                                                    className={`form-control w-full p-3 rounded border ${touchedFields.email
+                                                    readOnly
+                                                    className={`form-control w-full p-3 rounded border bg-gray-100 cursor-not-allowed ${touchedFields.email
                                                         ? errors.email
                                                             ? "border-red-500"
                                                             : "border-green-500"

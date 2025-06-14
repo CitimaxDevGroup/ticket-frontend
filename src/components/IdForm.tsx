@@ -4,6 +4,10 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Sidebar from "./layout/sidebar";
 import { CheckCircle, AlertCircle, HelpCircle, Italic } from "lucide-react";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useEffect } from "react";
+import { auth } from "@/firebase"; // Adjust the path if needed
+
 
 const schema = z.object({
     fullName: z.string().min(1, "Full Name is required"),
@@ -37,6 +41,7 @@ export default function SingleForm() {
         formState: { errors },
         watch,
         reset,
+        setValue, // ← needed to programmatically update form values
     } = useForm({ resolver: zodResolver(schema), mode: "onTouched" });
 
     const section1Fields = ["fullName", "address", "email", "position", "cname", "company", "photo", "esign"];
@@ -53,7 +58,7 @@ export default function SingleForm() {
     const section2Completed = section2Fields.every(
         (field) => !!watch(field) && !errors[field]
     );
-
+    const [userEmail, setUserEmail] = useState("");
     const [showStatusModal, setShowStatusModal] = useState(false);
     const [submitStatus, setSubmitStatus] = useState<"success" | "error">("success");
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -118,6 +123,17 @@ export default function SingleForm() {
             setIsSubmitting(false);
         }
     };
+    useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user && user.email) {
+            setUserEmail(user.email);
+            setValue("email", user.email); // Set email in the form
+        }
+    });
+
+    return () => unsubscribe();
+}, [setValue]);
+
 
     return (
         <div className="flex min-h-screen flex-col md:flex-row bg-gray-100">
@@ -248,12 +264,14 @@ export default function SingleForm() {
                             focusColor={blueColor}
                         />
                         <InputField
-                            label="Email"
-                            id="email"
-                            register={register}
-                            error={errors.email?.message}
-                            focusColor={blueColor}
+                           label="Email"
+                           id="email"
+                           register={register}
+                           error={errors.email?.message}
+                           focusColor={blueColor}
+                           disabled={true} // optional: makes the email read-only
                         />
+
                         <InputField
                             label="Job Position"
                             id="position"
@@ -399,7 +417,7 @@ export default function SingleForm() {
     );
 }
 
-function InputField({ label, id, register, error, focusColor }) {
+function InputField({ label, id, register, error, focusColor, disabled = false }) {
     return (
         <div className="mb-6">
             <label htmlFor={id} className="block mb-2 text-sm font-medium text-gray-900">
@@ -420,6 +438,7 @@ function InputField({ label, id, register, error, focusColor }) {
                     e.target.style.borderColor = error ? "#f87171" : "#d1d5db";
                     e.target.style.boxShadow = "none";
                 }}
+                disabled={disabled}
             />
             {error && <p className="text-red-600 text-xs mt-1">{error}</p>}
         </div>
