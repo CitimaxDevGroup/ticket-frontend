@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
-import { auth } from "@/firebase"; // Ensure this path is correct
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "@/firebase";
 
 function RegistrationForm() {
   const navigate = useNavigate();
@@ -13,16 +13,29 @@ function RegistrationForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
+  const provider = new GoogleAuthProvider();
+
+  const handleGoogleSignUp = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+
+      if (!user.displayName && fullName) {
+        await updateProfile(user, { displayName: fullName });
+      }
+      navigate("/ticketing");
+    } catch (err) {
+      console.error("Google Sign-up error:", err);
+      setError("Google sign-up failed. Please try again.");
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    
-
     if (password !== confirmPassword) {
       alert("Passwords do not match.");
       return;
     }
-
     if (!fullName || !email || !password) {
       alert("Please fill in all required fields.");
       return;
@@ -41,7 +54,11 @@ function RegistrationForm() {
 
   return (
     <div className="animate-fade-in">
-      <button className="google-btn w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300 mb-6">
+      <button
+        onClick={handleGoogleSignUp}
+        type="button"
+        className="google-btn w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300 mb-6"
+      >
         <img
           src="https://logowik.com/content/uploads/images/985_google_g_icon.jpg"
           alt="Google logo"
@@ -123,11 +140,7 @@ function RegistrationForm() {
             />
           </div>
         </div>
-
-        
-
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
-
         <button
           type="submit"
           className="w-full bg-[#6491ba] hover:bg-[#507aa0] text-white py-3 px-4 rounded-lg font-medium transition-all duration-300 transform hover:scale-[1.02] shadow-md"

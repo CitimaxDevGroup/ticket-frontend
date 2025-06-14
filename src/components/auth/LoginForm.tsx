@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/firebase"; // Make sure this path matches your Firebase setup
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { auth } from "@/firebase";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -9,6 +9,17 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+
+  const provider = new GoogleAuthProvider();
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+      navigate("/ticketing");
+    } catch (err) {
+      console.error("Google sign-in error:", err);
+      setError("Failed to sign in with Google.");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +31,7 @@ function LoginForm() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/ticketing"); // Redirect after successful login
+      navigate("/ticketing");
     } catch (err) {
       setError("Invalid email or password.");
     }
@@ -28,7 +39,10 @@ function LoginForm() {
 
   return (
     <div className="animate-fade-in">
-      <button className="google-btn w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300 mb-6">
+      <button
+        onClick={handleGoogleSignIn}
+        className="google-btn w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300 mb-6"
+      >
         <img
           src="https://logowik.com/content/uploads/images/985_google_g_icon.jpg"
           alt="Google logo"
@@ -36,7 +50,6 @@ function LoginForm() {
         />
         Continue with Google
       </button>
-
       <div className="flex items-center my-6">
         <div className="flex-grow border-t border-gray-300"></div>
         <span className="mx-4 text-gray-500 text-sm">OR</span>
