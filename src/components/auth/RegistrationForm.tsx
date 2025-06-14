@@ -54,7 +54,7 @@ function RegistrationForm() {
 
   return (
     <div className="animate-fade-in">
-      <button
+      {/* <button
         onClick={handleGoogleSignUp}
         type="button"
         className="google-btn w-full flex items-center justify-center py-3 px-4 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300 mb-6"
@@ -65,22 +65,22 @@ function RegistrationForm() {
           className="h-8 w-10 mr-3"
         />
         Continue with Google
-      </button>
+      </button> */}
 
-      <div className="flex items-center my-6">
+      {/* <div className="flex items-center my-6">
         <div className="flex-grow border-t border-gray-300"></div>
         <span className="mx-4 text-gray-500 text-sm">OR</span>
         <div className="flex-grow border-t border-gray-300"></div>
-      </div>
+      </div> */}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-3">
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
-          <label className="block text-xs text-gray-500 px-4 pt-3">Full Name</label>
-          <div className="flex items-center px-4 pb-2">
+          <label className="block text-xs text-gray-500 px-4 pt-1">Full Name</label>
+          <div className="flex items-center px-4 pb-1">
             <i className="fas fa-user text-gray-400 mr-2"></i>
             <input
               type="text"
-              className="w-full py-2 outline-none bg-transparent"
+              className="w-full py-2 outline-none bg-transparent focus:outline-none focus:ring-0"
               placeholder="John Doe"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
@@ -90,12 +90,12 @@ function RegistrationForm() {
         </div>
 
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
-          <label className="block text-xs text-gray-500 px-4 pt-3">Email Address</label>
-          <div className="flex items-center px-4 pb-2">
+          <label className="block text-xs text-gray-500 px-4 pt-1">Email Address</label>
+          <div className="flex items-center px-4 pb-1">
             <i className="fas fa-envelope text-gray-400 mr-2"></i>
             <input
               type="email"
-              className="w-full py-2 outline-none bg-transparent"
+              className="w-full py-2 outline-none bg-transparent focus:outline-none focus:ring-0"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -105,12 +105,12 @@ function RegistrationForm() {
         </div>
 
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
-          <label className="block text-xs text-gray-500 px-4 pt-3">Password</label>
-          <div className="flex items-center px-4 pb-2">
+          <label className="block text-xs text-gray-500 px-4 pt-1">Password</label>
+          <div className="flex items-center px-4 pb-1">
             <i className="fas fa-lock text-gray-400 mr-2"></i>
             <input
               type={showPassword ? "text" : "password"}
-              className="w-full py-2 outline-none bg-transparent"
+              className="w-full py-2 outline-none bg-transparent focus:outline-none focus:ring-0"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -127,12 +127,12 @@ function RegistrationForm() {
         </div>
 
         <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
-          <label className="block text-xs text-gray-500 px-4 pt-3">Confirm Password</label>
+          <label className="block text-xs text-gray-500 px-4 pt-1">Confirm Password</label>
           <div className="flex items-center px-4 pb-2">
             <i className="fas fa-lock text-gray-400 mr-2"></i>
             <input
               type={showPassword ? "text" : "password"}
-              className="w-full py-2 outline-none bg-transparent"
+              className="w-full py-2 outline-none bg-transparent focus:outline-none focus:ring-0"
               placeholder="••••••••"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -149,14 +149,14 @@ function RegistrationForm() {
         </button>
       </form>
 
-      <div className="mt-6 text-center">
+      {/* <div className="mt-6 text-center">
         <p className="text-gray-600">
           Already have an account?
           <a href="/" className="text-blue-600 hover:text-blue-800 font-medium hover:underline ml-1">
             Log in
           </a>
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -57,7 +57,7 @@ function LoginForm() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300">
+        <div className="input-field bg-gray-50 border border-gray-300 rounded-lg transition-all duration-300 focus-within:border-[#6491ba]">
           <label htmlFor="email" className="block text-xs text-gray-500 px-4 pt-3">
             Email Address
           </label>
@@ -66,7 +66,7 @@ function LoginForm() {
             <input
               type="email"
               id="email"
-              className="w-full py-2 outline-none bg-transparent"
+              className="w-full py-2 outline-none bg-transparent focus:outline-none focus:ring-0"
               placeholder="you@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -84,7 +84,7 @@ function LoginForm() {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              className="w-full py-2 outline-none bg-transparent"
+              className="w-full py-2 outline-none bg-transparent focus:outline-none focus:ring-0"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -100,11 +100,11 @@ function LoginForm() {
           </div>
         </div>
 
-        <div className="flex items-center justify-between text-sm">
+        {/* <div className="flex items-center justify-between text-sm">
           <a href="#" className="text-blue-600 hover:text-blue-800 hover:underline">
             Forgot password?
           </a>
-        </div>
+        </div> */}
 
         {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
@@ -116,14 +116,14 @@ function LoginForm() {
         </button>
       </form>
 
-      <div className="mt-6 text-center">
+      {/* <div className="mt-6 text-center">
         <p className="text-gray-600">
           Don't have an account?
           <a href="/signup" className="text-blue-600 hover:text-blue-800 font-medium hover:underline ml-1">
             Sign up
           </a>
         </p>
-      </div>
+      </div> */}
     </div>
   );
 }
