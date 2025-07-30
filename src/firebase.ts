@@ -1,8 +1,10 @@
+// firebase.ts
+
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 
-// Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAIV30Q6FKq7ZQWHuNw4HwTsRyIU_5D4x8",
   authDomain: "citimaxticket.firebaseapp.com",
@@ -13,8 +15,7 @@ const firebaseConfig = {
   measurementId: "G-HJ54PLL9NQ"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firebase Authentication
 export const auth = getAuth(app);
+export const db = getFirestore(app); // ✅ Firestore export
