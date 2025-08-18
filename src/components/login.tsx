@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card } from "@/components/ui/card";
 import LoginForm from "@/components/auth/LoginForm";
 import RegisterForm from "@/components/auth/RegistrationForm";
-import login from './images/login.png';
+import login from './images/orecentral.png';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
